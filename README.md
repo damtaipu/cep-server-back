@@ -1,2 +1,2 @@
-# cep-server-back
-Api em NodeJS para consulta de CEP: 
+# API Rest CEP
+Api REST desenvolvida com NodeJs e Typescript para consulta de CEP.
