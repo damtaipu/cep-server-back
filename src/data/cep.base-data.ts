@@ -1,5 +1,5 @@
 export default interface rtnData {
-    code: number;
+    code?: number;
     message?: string;
-    data: {};
+    data?: {};
 }

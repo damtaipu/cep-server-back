@@ -7,4 +7,6 @@ cepRoute.get('/cep', new CepController().allCep);
 
 cepRoute.get('/cep/:cep', new CepController().onlyOneCep);
 
+cepRoute.post('/cep/call', new CepController().callCEP);
+
 export default cepRoute;
