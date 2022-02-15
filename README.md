@@ -5,8 +5,8 @@ express;
 Routers;
 Controllers;
 Path modules;
-Classe generica para consultas SQL e/ou chamada de procedures (Mysql);
-Classe genérica para retorno e dados;
+Classes genericas para consultas SQL e/ou chamada de procedures (Mysql);
+Classes genéricas para retorno de dados;
 ts-node-dev;
 
 
