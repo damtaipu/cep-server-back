@@ -1,22 +1,23 @@
 import {Request, Response} from 'express';
-import { BaseData } from '@data/cep-base.class'
-import ExecuteSql from '../services/sql-generic.service'
+import { BaseData } from '@data/cep-base.class';
+import ExecuteSql from '../services/sql-generic.service';
 
-export default class CepController {
+export default class CepController {  
+
     // Retorna todos os CEPs
-    public allCep(req: Request, res: Response, next: any){
+    public allCep(req: Request, res: Response){
         let baseData: BaseData = new BaseData(200, 'Todos os CEPs', []);
         return baseData.sendResponse(res);
     }
 
     // Retorna CEP epecífico
-    public onlyOneCep(req: Request, res: Response, next: any){
+    public onlyOneCep(req: Request, res: Response){
         let baseData: BaseData = new BaseData(200, 'CEP específico', [{cep: 59555000}]);
         return baseData.sendResponse(res);
     }
 
     // Chama procedure no Mysql
-    public async callCEP(req: Request, res: Response, next: any){
+    public async callCEP(req: Request, res: Response){
         try {
             let sql = new ExecuteSql('CALL showUsers;');
             const rst:any = await sql.execute(); 

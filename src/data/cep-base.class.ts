@@ -1,4 +1,4 @@
-import {Response} from 'express';
+import {response, Response} from 'express';
 import rtnData from './cep.base-data';
 
 export class BaseData {
@@ -18,7 +18,6 @@ export class BaseData {
             message: this.message,
             data: this.data
         };
-
         return res.status(this.code).send(dta);
     }
 
