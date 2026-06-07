@@ -1,25 +1,25 @@
+import { MysqlError } from 'mysql';
 import pool from '../config/mysql-config';
 
-const mysql = pool;
+type QueryParam = string | number | boolean | Date | null;
+type QueryParams = QueryParam[] | Record<string, QueryParam>;
 
-export default class ExecuteSql {
-    private query: string;
-    private params?: [];
+export default class ExecuteSql<T = unknown> {
+    constructor(
+        private readonly query: string,
+        private readonly params?: QueryParams
+    ) {}
 
-    constructor(qry: string, par?: []) {
-        this.query = qry;
-        this.params = par;
-    }
-
-    public execute = () => {
-        return new Promise((resolve, reject) => {
-            mysql.query(this.query, this.params, (error, result, fields) => {
+    public execute(): Promise<T> {
+        return new Promise<T>((resolve, reject) => {
+            pool.query(this.query, this.params, (error: MysqlError | null, result: T) => {
                 if (error) {
                     reject(error);
-                } else {
-                    resolve(result);
+                    return;
                 }
+
+                resolve(result);
             });
         });
-    };
+    }
 }

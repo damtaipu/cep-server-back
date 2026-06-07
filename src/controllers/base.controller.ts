@@ -1,7 +1,8 @@
-import {Request, Response} from 'express';
+import { RequestHandler } from 'express';
+import { BaseData } from '@data/cep-base.class';
 
 export default class BaseController {
-    public index(req: Request, res: Response, next: any){
-        return res.status(401).send('URL base não autorizada');
-    }
+    public readonly index: RequestHandler = (_req, res) => {
+        return new BaseData(401, 'URL base não autorizada', []).sendResponse(res);
+    };
 }

@@ -2,7 +2,8 @@ import { Router } from 'express';
 import BaseController from '@controllers/base.controller';
 
 const baseRoute = Router();
+const baseController = new BaseController();
 
-baseRoute.get('/', new BaseController().index);
+baseRoute.get('/', baseController.index);
 
 export default baseRoute;

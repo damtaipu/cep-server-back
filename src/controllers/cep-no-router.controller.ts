@@ -1,10 +1,8 @@
-import { Request, Response} from 'express';
-import { BaseData } from '@data/cep-base.class'
+import { RequestHandler } from 'express';
+import { BaseData } from '@data/cep-base.class';
 
 export default class NoRouteController {
-    // Trata rota não criada
-    public noRoute(req: Request, res: Response, next: any){
-        let baseData: BaseData = new BaseData(404, 'Rota não encontrada!', []);
-        return baseData.sendResponse(res)
-    }
+    public readonly noRoute: RequestHandler = (_req, res) => {
+        return new BaseData(404, 'Rota não encontrada!', []).sendResponse(res);
+    };
 }

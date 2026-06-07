@@ -4,48 +4,28 @@ import baseRoute from '@routes/base.route';
 import cepNoRoute from '@routes/cep-no.route';
 
 class App {
-    public express: express.Application;
+    public readonly express: express.Application;
 
     constructor() {
         this.express = express();
-        this.jsonBody();
-        this.routeBase();
-        this.routeCep();
-        this.routeInsertCep();
-
-        //Sem rota
-        this.noRoute();
+        this.configureMiddlewares();
+        this.configureRoutes();
+        this.configureNotFoundHandler();
     }
 
-    // Trata URL base
-    private routeBase() {
-        this.express.use(baseRoute)
-    }
-
-    private routeCep() {
-        this.express.use(cepRoute);
-    }
-
-    private routeInsertCep() {
-        this.express.use(cepRoute);
-    }
-
-    // Trata  rota não encontrada
-    private noRoute() {
-        this.express.use(cepNoRoute);
-    }
-
-    //JSON Body parser
-    private jsonBody() {
-        this.express.use(
-            express.urlencoded({
-                extended: true
-            })
-        );
-
+    private configureMiddlewares(): void {
+        this.express.use(express.urlencoded({ extended: true }));
         this.express.use(express.json());
     }
 
+    private configureRoutes(): void {
+        this.express.use(baseRoute);
+        this.express.use(cepRoute);
+    }
+
+    private configureNotFoundHandler(): void {
+        this.express.use(cepNoRoute);
+    }
 }
 
 export default new App().express;
