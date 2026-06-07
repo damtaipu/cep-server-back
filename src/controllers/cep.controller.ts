@@ -1,31 +1,38 @@
-import {Request, Response} from 'express';
+import { MysqlError } from 'mysql';
+import { RequestHandler } from 'express';
 import { BaseData } from '@data/cep-base.class';
 import ExecuteSql from '../services/sql-generic.service';
 
-export default class CepController {  
+interface CepDto {
+    cep: string;
+}
 
-    // Retorna todos os CEPs
-    public allCep(req: Request, res: Response){
-        let baseData: BaseData = new BaseData(200, 'Todos os CEPs', []);
-        return baseData.sendResponse(res);
-    }
+type ProcedureResult<T> = [T[], unknown];
 
-    // Retorna CEP epecífico
-    public onlyOneCep(req: Request, res: Response){
-        let baseData: BaseData = new BaseData(200, 'CEP específico', [{cep: 59555000}]);
-        return baseData.sendResponse(res);
-    }
+export default class CepController {
+    public readonly allCep: RequestHandler = (_req, res) => {
+        return new BaseData<CepDto[]>(200, 'Todos os CEPs', []).sendResponse(res);
+    };
 
-    // Chama procedure no Mysql
-    public async callCEP(req: Request, res: Response){
+    public readonly onlyOneCep: RequestHandler<{ cep: string }> = (req, res) => {
+        const { cep } = req.params;
+        return new BaseData<CepDto>(200, 'CEP específico', { cep }).sendResponse(res);
+    };
+
+    public readonly callCEP: RequestHandler = async (_req, res) => {
         try {
-            let sql = new ExecuteSql('CALL showUsers;');
-            const rst:any = await sql.execute(); 
-            let rtnData: BaseData = new BaseData(200, 'Sucesso', rst[0]);
-            return rtnData.sendResponse(res);
+            const sql = new ExecuteSql<ProcedureResult<unknown>>('CALL showUsers;');
+            const [rows] = await sql.execute();
+
+            return new BaseData(200, 'Sucesso', rows).sendResponse(res);
         } catch (error) {
-            let bsDtError: BaseData = new BaseData(500, error.code, []);
-            return bsDtError.sendResponse(res);
-        }        
+            const message = this.getDatabaseErrorMessage(error);
+            return new BaseData(500, message, []).sendResponse(res);
+        }
+    };
+
+    private getDatabaseErrorMessage(error: unknown): string {
+        const mysqlError = error as Partial<MysqlError>;
+        return mysqlError.code ?? 'Erro interno ao consultar dados';
     }
 }

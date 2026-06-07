@@ -1,24 +1,22 @@
-import {response, Response} from 'express';
-import rtnData from './cep.base-data';
+import { Response } from 'express';
+import ApiResponse from './cep.base-data';
 
-export class BaseData {
-    code: number;
-    message: string;
-    data: rtnData;
-    
-    constructor(code: number, message: string, data: {}) {
-        this.code = code;
-        this.message = message;
-        this.data = data;
+export class BaseData<T = unknown> implements ApiResponse<T> {
+    constructor(
+        public readonly code: number,
+        public readonly message: string,
+        public readonly data: T
+    ) {}
+
+    public sendResponse(res: Response): Response<ApiResponse<T>> {
+        return res.status(this.code).json(this.toJSON());
     }
 
-    public sendResponse(res: Response){
-        let dta: rtnData = {
+    private toJSON(): ApiResponse<T> {
+        return {
             code: this.code,
             message: this.message,
             data: this.data
         };
-        return res.status(this.code).send(dta);
     }
-
 }

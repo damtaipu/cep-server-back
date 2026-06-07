@@ -1,5 +1,6 @@
 import NoRouteController from '@controllers/cep-no-router.controller';
 
-const cepNoRoute = new NoRouteController().noRoute;
+const noRouteController = new NoRouteController();
+const cepNoRoute = noRouteController.noRoute;
 
 export default cepNoRoute;

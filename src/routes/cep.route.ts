@@ -1,13 +1,12 @@
 import { Router } from 'express';
 import CepController from '@controllers/cep.controller';
-import checkToken from '../middleware/check-token-mid'
+import checkToken from '../middleware/check-token-mid';
 
 const cepRoute = Router();
+const cepController = new CepController();
 
-cepRoute.get('/cep', new CepController().allCep);
-
-cepRoute.get('/cep/:cep', checkToken, new CepController().onlyOneCep);
-
-cepRoute.post('/cep/call', new CepController().callCEP);
+cepRoute.get('/cep', cepController.allCep);
+cepRoute.get('/cep/:cep', checkToken, cepController.onlyOneCep);
+cepRoute.post('/cep/call', cepController.callCEP);
 
 export default cepRoute;
